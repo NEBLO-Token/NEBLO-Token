@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEBLO Live Price</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0b0f1a;
+      color: #fff;
+      text-align: center;
+      padding: 2rem;
+    }
+    .card {
+      background-color: #1e2639;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: inline-block;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    #price {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>NEBLO Live Price</h1>
+    <div id="price">Loading...</div>
+  </div>
+
+  <script>
+    async function getNEBLOPrice() {
+      try {
+        // Remplace l'adresse de ton token et WBNB si besoin
+        const tokenAddress = '0x6681bAAf5E75c33906778556C9813AEb4dDd77a5';
+        const url = `https://api.dexscreener.com/latest/dex/pairs/bsc/${tokenAddress}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const price = data.pair?.priceUsd || 'N/A';
+        document.getElementById('price').innerText = price === 'N/A' ? 'Unavailable' : `$${parseFloat(price).toFixed(6)}`;
+      } catch (err) {
+        document.getElementById('price').innerText = 'Error fetching price';
+      }
+    }
+
+    getNEBLOPrice();
+    setInterval(getNEBLOPrice, 15000); // refresh every 15s
+  </script>
+</body>
+</html>
